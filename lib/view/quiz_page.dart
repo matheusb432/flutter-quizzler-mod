@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:quizzler_flutter/controller/answer_controller.dart';
 import 'package:quizzler_flutter/controller/question_controller.dart';
+import 'package:quizzler_flutter/controller/quiz_controller.dart';
 import 'package:quizzler_flutter/model/answer.dart';
 
 class QuizzlerApp extends StatelessWidget {
@@ -46,6 +47,7 @@ class _QuizPageState extends State<QuizPage> {
     ]);
   }
 
+  QuizController quizController = GetIt.I<QuizController>();
   AnswerController answerController = GetIt.I<AnswerController>();
   QuestionController questionController = GetIt.I<QuestionController>();
 
@@ -101,7 +103,7 @@ class _QuizPageState extends State<QuizPage> {
   }
 
   void rebuildAnswerButtons() {
-    bool active = questionController.isQuizActive;
+    bool active = quizController.isQuizActive;
     if (active) {
       setState(() {
         answerButtons = _defaultAnswerButtons();
@@ -114,7 +116,7 @@ class _QuizPageState extends State<QuizPage> {
             color: Colors.green,
             questionAnswer: true,
             onPressedCallback: () {
-              questionController.restartQuiz();
+              quizController.restartQuiz();
 
               rebuildAnswerButtons();
             },
@@ -125,7 +127,7 @@ class _QuizPageState extends State<QuizPage> {
   }
 
   void _answerQuestion(bool questionAnswer) {
-    if (!questionController.isQuizActive) {
+    if (!quizController.isQuizActive) {
       return;
     }
 
@@ -139,7 +141,7 @@ class _QuizPageState extends State<QuizPage> {
     );
 
     if (questionController.isLastQuestion()) {
-      questionController.endQuiz();
+      quizController.endQuiz();
 
       rebuildAnswerButtons();
     } else {
@@ -185,7 +187,6 @@ class _QuizPageState extends State<QuizPage> {
             // ? screen space, can be a column to with vertical axis.
             return Wrap(
               direction: Axis.horizontal,
-              // ? like map() is JS
               children: answerController.answers
                   .map((Answer s) => s.answerIcon)
                   .toList(),

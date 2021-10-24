@@ -12,12 +12,10 @@ class AnswerController extends ChangeNotifier {
 
   resetAnswers() {
     answers = [];
-
-    notifyListeners();
   }
 
   getScore() {
-    // ? this is kind of like reduce() in JS, essentially just counting all the correct answers though.
+    // ? this is kind of like reduce() in JS, essentially just counting all the correct answers.
     return answers.fold(
         0, (int prev, Answer el) => prev + (el.isCorrect ? 1 : 0));
   }
